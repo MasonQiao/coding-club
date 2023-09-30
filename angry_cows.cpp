@@ -3,34 +3,23 @@
 using namespace std;
 
 
-int n, bales[50000], leftthreshold, rightthreshold;
+int n, bales[50000], difs[50000], leftthreshold, rightthreshold, j;
 
 bool rcheck(int f, int R) {
-	leftthreshold = 0;
-	rightthreshold = 0;
-	if (f%2 == 0) {
-		for (int i = 0; i < f/2; i++) {
-			leftthreshold = max(leftthreshold, bales[i+1]-bales[i] + (f-i-1));
-		}
-		for (int i = f/2; i < n - 1; i++) {
-			rightthreshold = max(rightthreshold, bales[i+1]-bales[i] + (i-f));
-		}
-		return max(leftthreshold, rightthreshold) <= R;
+	leftthreshold = difs[f]/2;
+	rightthreshold = difs[f]/2;
+	j = 1;
+	for (int i = f-1; i>=0; i-=1) {
+        leftthreshold = max(leftthreshold, (difs[i] + 2*j));
+        j ++;
 	}
-	else {
-		leftthreshold = (bales[(f+1)/2] - bales[(f-1)/2]) / 2;
-		for (int i = 0; i < (f-1)/2; i++) {
-			leftthreshold = max(leftthreshold, bales[i+1]-bales[i] + (f-i-1));
-		}
-		rightthreshold = (bales[(f+1)/2] - bales[(f-1)/2]) / 2;
-		for (int i = (f+1)/2; i < n - 1; i++) {
-			rightthreshold = max(rightthreshold, bales[i+1]-bales[i] + (i-f));
-		}
-		return max(leftthreshold, rightthreshold) <= R;
+	j = 1;
+	for (int i = f+1; i < n-1; i++) {
+        rightthreshold = max(rightthreshold, (difs[i] + 2*j));
+        j++;
 	}
+	return max(leftthreshold, rightthreshold) <= R;
 }
-
-
 int hijoshua() {
 
 	int le = 1;
@@ -48,7 +37,7 @@ int hijoshua() {
 
 		randomshit = false;
 
-		for (int i = 0; i + 1 < 2*n; i++) {
+		for (int i = 0; i < n - 1; i++) {
 
 			if (rcheck(i, mid)) {
 
@@ -96,11 +85,16 @@ int main() {
 		cin >> x;
 
 		bales[i] = x * 2;
-
 	}
 
-
 	sort(bales, bales + n);
-	printf("%.1f", hijoshua()/2.0);
+
+    for (int i = 0; i < (n - 1); i++) {
+        difs[i] = (bales[i+1] - bales[i]);
+    }
+
+    printf("%.1f", hijoshua()/2.0);
+
+	return 0;
 
 }
