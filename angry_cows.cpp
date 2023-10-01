@@ -2,8 +2,23 @@
 
 using namespace std;
 
+int n, bales[50000], difs[50000], leftthreshold, rightthreshold, j, beststart;
 
-int n, bales[50000], difs[50000], leftthreshold, rightthreshold, j;
+int threshholddif(int f) {
+	leftthreshold = difs[f]/2;
+	rightthreshold = difs[f]/2;
+	j = 1;
+	for (int i = f-1; i>=0; i-=1) {
+        leftthreshold = max(leftthreshold, (difs[i] + 2*j));
+        j ++;
+	}
+	j = 1;
+	for (int i = f+1; i < n-1; i++) {
+        rightthreshold = max(rightthreshold, (difs[i] + 2*j));
+        j++;
+	}
+	return abs(leftthreshold - rightthreshold);
+}
 
 bool rcheck(int f, int R) {
 	leftthreshold = difs[f]/2;
@@ -26,8 +41,6 @@ int hijoshua() {
 
 	int ri = bales[n-1]-bales[0];
 
-	bool randomshit;
-
 	int mid;
 
 
@@ -35,21 +48,8 @@ int hijoshua() {
 
 		mid = (le + ri) / 2;
 
-		randomshit = false;
 
-		for (int i = 0; i < n - 1; i++) {
-
-			if (rcheck(i, mid)) {
-
-				randomshit = true;
-
-				break;
-
-			}
-
-		}
-
-		if (randomshit) {
+		if (rcheck(beststart, mid)) {
 
 			ri = mid;
 
@@ -92,6 +92,19 @@ int main() {
     for (int i = 0; i < (n - 1); i++) {
         difs[i] = (bales[i+1] - bales[i]);
     }
+
+    beststart = n;
+    int minthresholddif = 1e9;
+
+    for (int i = 0; i < n - 1; i++) {
+        int randomshit = threshholddif(i);
+        if (randomshit < minthresholddif) {
+            beststart = i;
+            minthresholddif = randomshit;
+        }
+
+    }
+
 
     printf("%.1f", hijoshua()/2.0);
 
