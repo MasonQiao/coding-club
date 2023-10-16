@@ -1,3 +1,4 @@
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -18,15 +19,17 @@ int main() {
     for (int i = 0; i < n; i++) {
         cin >> b[i];
     }
+
+    index1 = k-1;
     sort(b, b + n, greater<int>());
-    while (2*b[k-1] < b[0]) {
-        print_list();
-        index1 = k-1;
+    while (b[0]/2 > b[k-1]) {
         while (index1 > 0) {
-            if (b[0] < (k-index1+1) * b[index1]) {
+            if (b[0]/(k-index1+2) > b[index1-1]) {
+                index1 -= 1;
+            }
+            else {
                 break;
             }
-            index1 -= 1;
         }
         extra = b[0] % (k-index1+1);
         b[0] = b[0]/(k-index1+1);
@@ -36,7 +39,6 @@ int main() {
         b[0] = b[0] + extra;
         sort(b, b + n, greater<int>());
     }
-
     for (int i = k/2; i < k; i++) {
         ans += b[i];
     }
