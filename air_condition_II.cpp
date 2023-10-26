@@ -4,6 +4,9 @@ using namespace std;
 int n, m, cows[3][20], ac[4][10], temps[101], mask, ans, cost;
 bool fucked;
 int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
     cin >> n >> m;
     for (int i = 0; i < n; i++) {
         cin >> cows[0][i] >> cows[1][i] >> cows[2][i];
@@ -19,17 +22,19 @@ int main() {
 
         for (int j = 0; j < 101; j++) {
             temps[j] = 0;
+
         }
 
         for (int j = m-1; j>=0; j-=1) {
-            if (pow(2, j) > mask) {
+            if (pow(2, j) <= mask) {
+                mask -= pow(2, j);
                 for (int k = ac[0][j]; k <= ac[1][j]; k++) {
                     temps[k] += ac[2][j];
                 }
                 cost += ac[3][j];
             }
-        }
 
+        }
         for (int j = 0; j < n; j++) {
             for (int k = cows[0][j]; k <= cows[1][j]; k++) {
                 if (temps[k] < cows[2][j]) {
@@ -42,5 +47,5 @@ int main() {
             ans = min(ans, cost);
         }
     }
-    cout << ans;
+    cout << ans << "\n";
 }
