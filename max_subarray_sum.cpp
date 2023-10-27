@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int n, arr[200000], prefix[200000], ans, x;
+long n, arr[200000], prefix[200000], ans, x;
 
 int main() {
     cin >> n;
